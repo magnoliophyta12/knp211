@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<title>Контакты</title>
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<script src="/js/scripts.js"></script>
+<style>
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background: #121212;
+	margin: 0;
+	padding: 0;
+	color: #e0e0e0;
+}
+
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px;
+	background: #212121;
+	border-bottom: 4px solid #ff3d00;
+}
+
+h1 {
+	color: #ff6f00;
+	margin: 0;
+	font-size: 2.5em;
+	text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+a {
+	text-decoration: none;
+	color: #ff6f00;
+	font-weight: bold;
+	transition: color 0.3s, transform 0.3s;
+}
+
+a:hover {
+	color: #ff3d00;
+	text-decoration: underline;
+	transform: scale(1.05);
+}
+
+.btn {
+	display: inline-block;
+	padding: 12px 24px;
+	margin: 8px;
+	border-radius: 8px;
+	color: #fff;
+	text-align: center;
+	font-size: 1em;
+	font-weight: bold;
+	transition: background 0.3s, transform 0.3s;
+}
+
+.btn-primary {
+	background: #212121;
+	border: 2px solid #ff6f00;
+}
+
+.btn-primary:hover {
+	background: #333;
+	border-color: #ff3d00;
+	transform: scale(1.05);
+}
+
+.btn-edit {
+	background: #333;
+	border: 2px solid #ff6f00;
+}
+
+.btn-edit:hover {
+	background: #444;
+	border-color: #ff3d00;
+	transform: scale(1.05);
+}
+
+.btn-delete {
+	background: #212121;
+	border: 2px solid #ff3d00;
+}
+
+.btn-delete:hover {
+	background: #333;
+	border-color: #ff5722;
+	transform: scale(1.05);
+}
+
+table {
+	width: 90%;
+	margin: 40px auto;
+	border-collapse: collapse;
+	background: #1e1e1e;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+thead {
+	background: #333;
+	color: #ff6f00;
+	font-size: 1.1em;
+}
+
+th, td {
+	padding: 15px;
+	text-align: left;
+	border-bottom: 1px solid #444;
+}
+
+td {
+	background: #262626;
+}
+
+tr:nth-child(even) {
+	background: #2c2c2c;
+}
+
+tr:hover {
+	background: #333;
+	transition: background 0.3s;
+}
+
+.buttons-wrap {
+	display: flex;
+}
+
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.7); /* затемнение фона */
+}
+
+.modal-content {
+	background-color: #212121; /* фон окна */
+	color: #e0e0e0; /* цвет текста */
+	margin: 15% auto;
+	padding: 20px;
+	border: 2px solid #ff3d00;
+	width: 300px;
+	text-align: center;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.modal-content p {
+	margin-bottom: 20px;
+	font-size: 1.1em;
+}
+
+.modal-content button {
+	padding: 10px 20px;
+	margin: 5px;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	font-size: 1em;
+	font-weight: bold;
+	color: #fff;
+	transition: background 0.3s, transform 0.3s;
+}
+
+/* Кнопка подтверждения */
+#confirmBtn {
+	background-color: #ff3d00; /* основной цвет акцента */
+}
+
+#confirmBtn:hover {
+	background-color: #ff6f00;
+	transform: scale(1.05);
+}
+
+/* Кнопка отмены */
+#cancelBtn {
+	background-color: #333;
+	border: 2px solid #ff3d00;
+}
+
+#cancelBtn:hover {
+	background-color: #444;
+	border-color: #ff6f00;
+	transform: scale(1.05);
+}
+</style>
+</head>
+<body>
+	<header>
+		<h1>Список контактов</h1>
+		<div class="buttons-wrap">
+			<div sec:authorize="isAuthenticated()">
+				<a href="/logout" class="btn btn-primary">Выйти</a>
+			</div>
+			<a href="/contacts/add" class="btn btn-primary">Добавить новый
+				контакт</a>
+		</div>
+
+	</header>
+
+
+	<div id="confirmModal" class="modal">
+		<div class="modal-content">
+			<p>Вы уверены, что хотите удалить контакт?</p>
+			<button id="confirmBtn">Да</button>
+			<button id="cancelBtn">Отмена</button>
+		</div>
+	</div>
+
+
+	<table class="contact-table">
+		<thead>
+			<tr>
+				<th>ФИО</th>
+				<th>Почта</th>
+				<th>Телефон</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+    <tr th:each="contact : ${contacts}">
+        <td th:text="${contact.name}"></td>
+        <td th:text="${contact.email}"></td>
+        <td th:text="${contact.phone}"></td>
+        <td>
+            <div class="buttons-wrap">
+                <!-- Кнопки только для администраторов -->
+                <div sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/contacts/edit/{id}(id=${contact.id})}" class="btn btn-edit">Редактировать</a>
+                    <form th:action="@{/contacts/delete/{id}(id=${contact.id})}" method="get" onsubmit="return openConfirmModal(this);">
+                        <button class="btn btn-delete" type="submit">Удалить</button>
+                    </form>
+                </div>
+                <!-- Сообщение для пользователей, которые не администраторы -->
+                <div sec:authorize="!hasRole('ADMIN')">
+                    <p>Для доп. настроек войдите как администратор.</p>
+                </div>
+            </div>
+        </td>
+    </tr>
+</tbody>
+	</table>
+</body>
+</html>

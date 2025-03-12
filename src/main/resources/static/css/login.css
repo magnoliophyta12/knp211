@@ -1,0 +1,81 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    margin: 0;
+    padding: 0;
+    color: #e0e0e0;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #212121;
+    border-bottom: 4px solid #ff3d00;
+}
+
+h1 {
+    color: #ff6f00;
+    margin: 0;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+form {
+    width: 100%;
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+div {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ff6f00;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: #262626;
+    color: #e0e0e0;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #ff6f00;
+    outline: none;
+}
+
+button {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 8px;
+    color: #fff;
+    background: #ff6f00;
+    border: none;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background: #ff3d00;
+    transform: scale(1.05);
+}
+
+button:focus {
+    outline: none;
+}
